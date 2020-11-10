@@ -4,12 +4,16 @@ import { API,Storage } from 'aws-amplify';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { listNotes } from './graphql/queries';
 import { createNote as createNoteMutation, deleteNote as deleteNoteMutation } from './graphql/mutations';
+import {HeadMenu} from './templates'
 
 const initialFormState = { name: '', description: '' }
 
 function App() {
+  /* useState([]) returns [any[],React.Dispatch<React.SetStateAction<any[]>>] */
   const [notes, setNotes] = useState([]);
+  /* useState(initialFormState) returns [any[],React.Dispatch<React.SetStateAction<any[]>>] */
   const [formData, setFormData] = useState(initialFormState);
+
 
   useEffect(() => {
     fetchNotes();
@@ -55,7 +59,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>My Notes App</h1>
+      <HeadMenu />
       <input
         onChange={e => setFormData({ ...formData, 'name': e.target.value})}
         placeholder="Note name"
@@ -89,5 +93,5 @@ function App() {
     </div>
   );
 }
-
-export default withAuthenticator(App);
+export default App;
+/* export default withAuthenticator(App); */
