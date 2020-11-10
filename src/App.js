@@ -94,7 +94,7 @@ function App() {
 
   return (
     <div className="App">
-      {auth.username} さん
+      test さん 
       <countContext.Provider value ={[count,setCount]}>
         <authContext.Provider value = {[auth,setAuth]}>
           <HeadMenu />
