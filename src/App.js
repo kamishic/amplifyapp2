@@ -1,16 +1,54 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,createContext } from 'react';
 import './App.css';
 import { API,Storage } from 'aws-amplify';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 import { listNotes } from './graphql/queries';
 import { createNote as createNoteMutation, deleteNote as deleteNoteMutation } from './graphql/mutations';
+import {HeadMenu,MainContents} from './templates'
+import { Auth } from "aws-amplify"
 
-const initialFormState = { name: '', description: '' }
+//const initialFormState = { name: '', description: '' }
+const initilalAuthState = {
+  isSignedIn: false,
+  role: "",
+  uid: "",
+  username: ""
+}
+
+
+
+
+
+export const countContext = createContext()
+export const authContext = createContext()
 
 function App() {
+  /* useState([]) returns [any[],React.Dispatch<React.SetStateAction<any[]>>] 
   const [notes, setNotes] = useState([]);
-  const [formData, setFormData] = useState(initialFormState);
+  /* useState(initialFormState) returns [any[],React.Dispatch<React.SetStateAction<any[]>>] 
+  const [formData, setFormData] = useState(initialFormState); */
 
+  const [auth,setAuth] = useState(initilalAuthState)
+  const [count,setCount] = useState(100)
+
+/*  const getUser = async () =>{
+    console.log("aaaa")
+    const [auth,setAuth] = useState(initilalAuthState)
+  
+    await Auth.currentAuthenticatedUser()
+      .then(res => {
+        console.log(res.username)
+        setAuth({username: res.username})
+        return res.username
+      }).catch(error => {
+        console.log(error)
+      })
+    console.log("cccc")  
+  }
+
+  getUser()
+*/
+  /*
   useEffect(() => {
     fetchNotes();
   }, []);
@@ -52,10 +90,18 @@ function App() {
     await Storage.put(file.name, file);
     fetchNotes();
   }
+  */
 
   return (
     <div className="App">
-      <h1>My Notes App</h1>
+      {auth.username} さん
+      <countContext.Provider value ={[count,setCount]}>
+        <authContext.Provider value = {[auth,setAuth]}>
+          <HeadMenu />
+          <MainContents/>
+        </authContext.Provider>
+      </countContext.Provider>
+      {/*
       <input
         onChange={e => setFormData({ ...formData, 'name': e.target.value})}
         placeholder="Note name"
@@ -84,10 +130,10 @@ function App() {
           </div>
         ))
       }
-      </div>
+    </div> */}
       <AmplifySignOut />
     </div>
   );
 }
-
-export default withAuthenticator(App);
+export default App;
+/* export default withAuthenticator(App); */
